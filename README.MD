@@ -1,9 +1,9 @@
 Java 8 based toy DB
 ===================
 
-This is a simple toy project with text-file based DB engine.
+This is a simple toy project with text file based DB engine.
 
-Most interested places are:
+Most interesting places are:
 * QueryExecutor # execute
 * TableView # join
 * TableView # findRow
@@ -22,7 +22,7 @@ valueN-1 | valueN-2 | valueN-3 | valueN-4 ...
 
 Functionality
 -------------
-* Only Select queries with INNER JOINs for One-To-One relation is are supported.
+* Only Select queries with INNER JOINs for One-To-One relation are supported.
 * Only String type is supported
 
 Run tests
