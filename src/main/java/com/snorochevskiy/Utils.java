@@ -1,0 +1,30 @@
+package com.snorochevskiy;
+
+import java.lang.reflect.Array;
+
+public class Utils {
+
+    private Utils() {
+
+    }
+
+    /**
+     * Concatenates two arrays into one array.
+     * @param a
+     * @param b
+     * @param <T>
+     * @return
+     */
+    public static <T> T[] concatArrays (T[] a, T[] b) {
+        int aLen = a.length;
+        int bLen = b.length;
+
+        @SuppressWarnings("unchecked")
+        T[] c = (T[]) Array.newInstance(a.getClass().getComponentType(), aLen+bLen);
+        System.arraycopy(a, 0, c, 0, aLen);
+        System.arraycopy(b, 0, c, aLen, bLen);
+
+        return c;
+    }
+
+}

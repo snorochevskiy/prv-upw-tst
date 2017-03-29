@@ -1,0 +1,4 @@
+user_info_id | ref_user_id | first_name | last_name | birth_year
+1            | 1           | first1     | last1     | 2000
+2            | 2           | first2     | last2     | 2001
+3            | 4           | first4     | last4     | 2004

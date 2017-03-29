@@ -1,0 +1,5 @@
+user_id | login  | passwd | status
+1       | login1 | 1111   | active
+2       | login2 | 1111   | active
+3       | login3 | 1111   | inactive
+4       | login4 | 1111   | active
