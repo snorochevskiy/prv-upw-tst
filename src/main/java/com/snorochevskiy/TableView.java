@@ -15,6 +15,8 @@ import java.util.stream.Stream;
  */
 class TableView {
 
+    private static final String DELIMITER = "\\s*\\|\\s*";
+
     // Names of columns
     private String[] columnNames;
 
@@ -100,25 +102,23 @@ class TableView {
      */
     private String[] findRow(int columnIndex, String value) {
 
-        try (Stream<String[]> stream = rows.stream()) {
-            String[] rightRow;
+        if (scanStrategy == ScanStrategy.FULL_TABLE_SCAN) {
+            try (Stream<String[]> stream = rows.stream()) {
 
-            if (scanStrategy == ScanStrategy.FULL_TABLE_SCAN) {
-                rightRow = stream.filter(row -> value.equals(row[columnIndex]))
+                return stream.filter(row -> value.equals(row[columnIndex]))
                         .findFirst()
                         .get();
-            } else {
-                String[] fakeSearchedRow = new String[columnNames.length];
-                fakeSearchedRow[columnIndex] = value;
-
-                int index = Collections.binarySearch(rows, fakeSearchedRow, (o1, o2) -> o1[columnIndex].compareTo(o2[columnIndex]));
-                rightRow = index >= 0
-                        ? rows.get(index)
-                        : new String[] {};
+            } catch (NoSuchElementException e) {
+                return new String[] {};
             }
-            return rightRow;
-        } catch (NoSuchElementException e) {
-            return new String[] {};
+        } else {
+            String[] fakeSearchedRow = new String[columnNames.length];
+            fakeSearchedRow[columnIndex] = value;
+
+            int index = Collections.binarySearch(rows, fakeSearchedRow, (o1, o2) -> o1[columnIndex].compareTo(o2[columnIndex]));
+            return index >= 0
+                    ? rows.get(index)
+                    : new String[] {};
         }
     }
 
@@ -126,7 +126,7 @@ class TableView {
         try (Stream<String> stream = Files.lines(path)) {
             return stream
                     .limit(1) // First line in file - table header
-                    .map(line -> line.split("\\s*\\|\\s*"))
+                    .map(line -> line.split(DELIMITER))
                     .findFirst()
                     .get();
         } catch (IOException e) {
@@ -138,7 +138,7 @@ class TableView {
         try (Stream<String> stream = Files.lines(path)) {
             return stream
                     .skip(1)
-                    .map(line -> line.split("\\s*\\|\\s*"))
+                    .map(line -> line.split(DELIMITER))
                     .collect(Collectors.toList());
         } catch (IOException e) {
             throw new IllegalArgumentException(e);
